@@ -1,58 +1,16 @@
 "use client";
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { useParams } from "next/navigation";
 import { useRequireAuth } from "@/hooks/useRequireAuth";
 import { useAuth } from "@/context/AuthContext";
 import { api } from "@/lib/api";
 
-export default function OrderDetailPage() {
-  const { id } = useParams();
-  const { user, loading } = useRequireAuth();
-  const { token } = useAuth();
-  const [order, setOrder] = useState(null);
-  const [error, setError] = useState("");
-
-  useEffect(() => {
-    if (!token) return;
-    api(`/orders/${id}`, { token })
-      .then((data) => setOrder(data.order))
-      .catch((err) => setError(err.message));
-  }, [id, token]);
-
-  if (loading || !user) return <p>Loading...</p>;
-  if (error) return <p className="text-red-600">{error}</p>;
-  if (!order) return <p>Loading...</p>;
-
-  return (
-    <div className="mx-auto max-w-lg space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold">Order #{order._id.slice(-6)}</h1>
-        <span className="rounded-full bg-gray-200 px-3 py-1 text-sm capitalize">
-          {order.status}
-        </span>
-      </div>
-      <p className="text-sm text-gray-500">{new Date(order.createdAt).toLocaleString()}</p>
-
-      <ul className="divide-y rounded-lg border bg-white">
-        {order.items.map((item) => (
-          <li key={item.product} className="flex justify-between p-4 text-sm">
-            <span>
-              {item.name} × {item.quantity}
-            </span>
-            <span>${(item.price * item.quantity).toFixed(2)}</span>
-          </li>
-        ))}
-      </ul>
-
-      <div className="flex justify-between text-lg font-bold">
-        <span>Total</span>
-        <span>${order.total.toFixed(2)}</span>
-      </div>
-
-      <Link href="/orders" className="text-sm underline">
-        Back to orders
-      </Link>
-    </div>
-  );
+export default function OrdersPage() {
+  const { user, loading } = useRequireAuth(); const { token } = useAuth();
+  const [orders, setOrders] = useState([]); const [fetching, setFetching] = useState(true); const [error, setError] = useState("");
+  useEffect(() => { if (!token) return; api("/orders", { token }).then((data) => setOrders(data.orders)).catch((err) => setError(err.message)).finally(() => setFetching(false)); }, [token]);
+  if (loading || !user || fetching) return <div className="py-16 text-center text-zinc-500">Loading your orders...</div>;
+  if (error) return <p className="rounded-xl bg-red-50 p-4 text-red-700">{error}</p>;
+  if (!orders.length) return <div className="mx-auto max-w-lg rounded-3xl border border-dashed p-12 text-center"><h1 className="text-2xl font-bold">No orders yet</h1><p className="mt-2 text-zinc-500">Your next great find is waiting.</p><Link href="/" className="mt-6 inline-block rounded-full bg-zinc-950 px-5 py-3 text-sm font-bold text-white">Start shopping</Link></div>;
+  return <div className="space-y-6"><div><p className="eyebrow">Your account</p><h1 className="mt-2 text-3xl font-bold tracking-tight">Your orders</h1></div><ul className="divide-y divide-zinc-100 rounded-2xl border border-zinc-200 bg-white shadow-sm">{orders.map((order) => <li key={order._id} className="flex flex-col gap-3 p-5 sm:flex-row sm:items-center sm:justify-between"><div><Link href={`/orders/${order._id}`} className="font-semibold hover:text-indigo-600">Order #{order._id.slice(-6)}</Link><p className="mt-1 text-sm text-zinc-500">{new Date(order.createdAt).toLocaleDateString()}</p></div><div className="flex items-center justify-between gap-6 sm:text-right"><div><p className="font-bold">${order.total.toFixed(2)}</p><p className="text-sm capitalize text-zinc-500">{order.status}</p></div><Link href={`/orders/${order._id}`} className="text-sm font-semibold text-indigo-600">View →</Link></div></li>)}</ul></div>;
 }

@@ -15,13 +15,11 @@ export default function CheckoutPage() {
   const [placing, setPlacing] = useState(false);
   const [error, setError] = useState("");
 
-  if (loading || !user) return <p>Loading...</p>;
+  if (loading || !user) return <div className="py-16 text-center text-zinc-500">Loading checkout...</div>;
 
   if (items.length === 0 && !placing) {
     return (
-      <div className="space-y-4 text-center">
-        <p>Your cart is empty.</p>
-        <Link href="/" className="underline">
+      <div className="mx-auto max-w-lg space-y-4 text-center"><p>Your cart is empty.</p><Link href="/" className="underline">
           Continue shopping
         </Link>
       </div>
@@ -42,10 +40,10 @@ export default function CheckoutPage() {
   };
 
   return (
-    <div className="mx-auto max-w-lg space-y-6">
-      <h1 className="text-2xl font-bold">Checkout</h1>
+    <div className="mx-auto max-w-2xl space-y-6">
+      <div><p className="eyebrow">Almost there</p><h1 className="mt-2 text-3xl font-bold tracking-tight">Review your order</h1><p className="mt-2 text-zinc-500">Everything look right? Place your order when you&apos;re ready.</p></div>
 
-      <ul className="divide-y rounded-lg border bg-white">
+      <ul className="divide-y divide-zinc-100 rounded-2xl border border-zinc-200 bg-white shadow-sm">
         {items.map(({ product, quantity }) => (
           <li key={product._id} className="flex justify-between p-4 text-sm">
             <span>
@@ -56,17 +54,17 @@ export default function CheckoutPage() {
         ))}
       </ul>
 
-      <div className="flex justify-between text-lg font-bold">
+      <div className="flex justify-between rounded-2xl bg-zinc-100 p-5 text-lg font-bold">
         <span>Total</span>
         <span>${total.toFixed(2)}</span>
       </div>
 
-      {error && <p className="text-red-600">{error}</p>}
+      {error && <p className="rounded-xl bg-red-50 p-3 text-sm text-red-700">{error}</p>}
 
       <button
         onClick={handlePlaceOrder}
         disabled={placing}
-        className="w-full rounded bg-black py-3 text-white disabled:opacity-50"
+        className="primary-button w-full disabled:opacity-50"
       >
         {placing ? "Placing order..." : "Place order"}
       </button>

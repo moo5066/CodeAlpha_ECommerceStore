@@ -37,20 +37,19 @@ export default function ProductPage() {
     }
   };
 
-  if (error && !product) return <p className="text-red-600">{error}</p>;
-  if (!product) return <p>Loading...</p>;
+  if (error && !product) return <p className="rounded-xl bg-red-50 p-4 text-red-700">{error}</p>;
+  if (!product) return <div className="py-16 text-center text-zinc-500">Loading product...</div>;
 
   const outOfStock = product.stock === 0;
 
   return (
-    <div className="grid gap-8 md:grid-cols-2">
-      <img src={product.image} alt={product.name} className="w-full rounded-lg object-cover" />
+    <div className="grid gap-8 lg:grid-cols-[1.15fr_0.85fr] lg:items-start">
+      <div className="overflow-hidden rounded-3xl bg-white p-2 shadow-sm"><img src={product.image} alt={product.name} className="aspect-square w-full rounded-2xl object-cover" /></div>
 
-      <div className="space-y-4">
-        <h1 className="text-3xl font-bold">{product.name}</h1>
-        <p className="text-sm text-gray-500">{product.category}</p>
-        <p className="text-2xl font-bold">${product.price.toFixed(2)}</p>
-        <p className="text-gray-700">{product.description}</p>
+      <div className="space-y-5 rounded-3xl border border-zinc-200 bg-white p-6 sm:p-8">
+        <p className="eyebrow">{product.category}</p><h1 className="text-3xl font-bold tracking-tight sm:text-4xl">{product.name}</h1>
+        <p className="text-2xl font-bold">${product.price.toFixed(2)}</p><div className="h-px bg-zinc-100" />
+        <p className="leading-7 text-zinc-600">{product.description}</p>
         <p className="text-sm">
           {outOfStock ? (
             <span className="text-red-600">Out of stock</span>
@@ -69,16 +68,16 @@ export default function ProductPage() {
               onChange={(e) =>
                 setQuantity(Math.min(Math.max(1, Number(e.target.value) || 1), product.stock))
               }
-              className="w-20 rounded border px-2 py-2"
+              className="field w-20 py-2"
             />
-            <button onClick={handleAdd} className="rounded bg-black px-6 py-2 text-white">
+            <button onClick={handleAdd} className="primary-button flex-1">
               Add to cart
             </button>
           </div>
         )}
 
-        {message && <p className="text-green-700">{message}</p>}
-        {error && <p className="text-red-600">{error}</p>}
+        {message && <p className="rounded-xl bg-emerald-50 p-3 text-sm text-emerald-700">{message}</p>}
+        {error && <p className="rounded-xl bg-red-50 p-3 text-sm text-red-700">{error}</p>}
       </div>
     </div>
   );

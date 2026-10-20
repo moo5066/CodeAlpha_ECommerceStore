@@ -31,45 +31,51 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="mx-auto max-w-sm space-y-6">
-      <h1 className="text-2xl font-bold">Register</h1>
-      <form onSubmit={handleSubmit} className="space-y-4">
+    <div className="mx-auto max-w-md rounded-3xl border border-zinc-200 bg-white p-6 shadow-sm sm:p-8">
+      <p className="eyebrow">Start your collection</p><h1 className="mt-2 text-3xl font-bold">Create an account</h1><p className="mt-2 text-sm text-zinc-500">Save your cart and keep track of every order.</p>
+      <form onSubmit={handleSubmit} className="mt-8 space-y-4">
+        <label className="sr-only" htmlFor="register-name">Full name</label>
         <input
+          id="register-name"
           name="name"
           placeholder="Full name"
           value={form.name}
           onChange={handleChange}
           required
-          className="w-full rounded border px-3 py-2"
+          className="field w-full"
         />
+        <label className="sr-only" htmlFor="register-email">Email address</label>
         <input
+          id="register-email"
           name="email"
           type="email"
           placeholder="Email"
           value={form.email}
           onChange={handleChange}
           required
-          className="w-full rounded border px-3 py-2"
+          className="field w-full"
         />
+        <label className="sr-only" htmlFor="register-password">Password</label>
         <input
+          id="register-password"
           name="password"
           type="password"
           placeholder="Password (min 6 characters)"
           value={form.password}
           onChange={handleChange}
           required
-          className="w-full rounded border px-3 py-2"
+          className="field w-full"
         />
         {error && <p className="text-sm text-red-600">{error}</p>}
         <button
           type="submit"
           disabled={submitting}
-          className="w-full rounded bg-black py-2 text-white disabled:opacity-50"
+          className="primary-button w-full disabled:opacity-50"
         >
           {submitting ? "Creating account..." : "Register"}
         </button>
       </form>
-      <p className="text-sm">
+      <p className="mt-6 text-sm text-zinc-500">
         Already registered? <Link href="/login" className="underline">Login</Link>
       </p>
     </div>

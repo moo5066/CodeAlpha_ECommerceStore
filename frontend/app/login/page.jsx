@@ -27,37 +27,41 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="mx-auto max-w-sm space-y-6">
-      <h1 className="text-2xl font-bold">Login</h1>
-      <form onSubmit={handleSubmit} className="space-y-4">
+    <div className="mx-auto max-w-md rounded-3xl border border-zinc-200 bg-white p-6 shadow-sm sm:p-8">
+      <p className="eyebrow">Welcome back</p><h1 className="mt-2 text-3xl font-bold">Log in</h1><p className="mt-2 text-sm text-zinc-500">Pick up where you left off.</p>
+      <form onSubmit={handleSubmit} className="mt-8 space-y-4">
+        <label className="sr-only" htmlFor="login-email">Email address</label>
         <input
+          id="login-email"
           name="email"
           type="email"
           placeholder="Email"
           value={form.email}
           onChange={handleChange}
           required
-          className="w-full rounded border px-3 py-2"
+          className="field w-full"
         />
+        <label className="sr-only" htmlFor="login-password">Password</label>
         <input
+          id="login-password"
           name="password"
           type="password"
           placeholder="Password"
           value={form.password}
           onChange={handleChange}
           required
-          className="w-full rounded border px-3 py-2"
+          className="field w-full"
         />
         {error && <p className="text-sm text-red-600">{error}</p>}
         <button
           type="submit"
           disabled={submitting}
-          className="w-full rounded bg-black py-2 text-white disabled:opacity-50"
+          className="primary-button w-full disabled:opacity-50"
         >
           {submitting ? "Logging in..." : "Login"}
         </button>
       </form>
-      <p className="text-sm">
+      <p className="mt-6 text-sm text-zinc-500">
         No account? <Link href="/register" className="underline">Register</Link>
       </p>
     </div>

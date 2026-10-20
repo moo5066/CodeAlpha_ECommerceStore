@@ -9,20 +9,26 @@ export function AuthProvider({ children }) {
   const [token, setToken] = useState(null);
   const [loading, setLoading] = useState(true);
 
- useEffect(() => {
-  const stored = localStorage.getItem("token");
+  useEffect(() => {
+    const stored = localStorage.getItem("token");
 
-  const restore = stored
-    ? api("/auth/me", { token: stored })
-        .then((data) => {
-          setToken(stored);
-          setUser(data.user);
-        })
-        .catch(() => localStorage.removeItem("token"))
-    : Promise.resolve();
+    if (!stored) {
+      Promise.resolve().finally(() => setLoading(false));
+      return;
+    }
 
-  restore.finally(() => setLoading(false));
-}, []);
+    api("/auth/me", { token: stored })
+      .then((data) => {
+        setToken(stored);
+        setUser(data.user);
+      })
+      .catch(() => {
+        localStorage.removeItem("token");
+        setToken(null);
+        setUser(null);
+      })
+      .finally(() => setLoading(false));
+  }, []);
 
   const saveSession = (data) => {
     localStorage.setItem("token", data.token);
