@@ -14,7 +14,7 @@ export default function ProductCard({ product }) {
       <div className="px-1 pb-1">
         <div className="mb-2 flex items-start justify-between gap-3">
           <h3 className="font-semibold leading-snug group-hover:text-indigo-600">{product.name}</h3>
-          <p className="shrink-0 font-bold">${product.price.toFixed(2)}</p>
+          <p className="shrink-0 font-bold">${Number(product.price).toFixed(2)}</p>
         </div>
         <p className="text-xs font-medium uppercase tracking-wide text-zinc-400">{product.category}</p>
       </div>

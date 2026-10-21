@@ -49,7 +49,7 @@ export default function CheckoutPage() {
             <span>
               {product.name} × {quantity}
             </span>
-            <span>${(product.price * quantity).toFixed(2)}</span>
+            <span>${(Number(product.price) * quantity).toFixed(2)}</span>
           </li>
         ))}
       </ul>

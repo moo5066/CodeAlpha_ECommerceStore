@@ -1,11 +1,11 @@
 "use client";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { api } from "@/lib/api";
 import { useAuth } from "@/context/AuthContext";
 import { useCart } from "@/context/CartContext";
 
-export default function ProductPage() {
+function ProductPageContent() {
   const { id } = useParams();
   const router = useRouter();
   const { token } = useAuth();
@@ -48,7 +48,7 @@ export default function ProductPage() {
 
       <div className="space-y-5 rounded-3xl border border-zinc-200 bg-white p-6 sm:p-8">
         <p className="eyebrow">{product.category}</p><h1 className="text-3xl font-bold tracking-tight sm:text-4xl">{product.name}</h1>
-        <p className="text-2xl font-bold">${product.price.toFixed(2)}</p><div className="h-px bg-zinc-100" />
+        <p className="text-2xl font-bold">${Number(product.price).toFixed(2)}</p><div className="h-px bg-zinc-100" />
         <p className="leading-7 text-zinc-600">{product.description}</p>
         <p className="text-sm">
           {outOfStock ? (
@@ -81,4 +81,8 @@ export default function ProductPage() {
       </div>
     </div>
   );
+}
+
+export default function ProductPage() {
+  return <Suspense fallback={<div className="py-16 text-center text-zinc-500">Loading product...</div>}><ProductPageContent /></Suspense>;
 }

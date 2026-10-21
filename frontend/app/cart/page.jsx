@@ -41,7 +41,7 @@ export default function CartPage() {
             <img src={product.image} alt={product.name} className="h-20 w-20 rounded-xl object-cover" />
             <div className="flex-1">
               <p className="font-medium">{product.name}</p>
-              <p className="text-sm text-gray-500">${product.price.toFixed(2)}</p>
+              <p className="text-sm text-gray-500">${Number(product.price).toFixed(2)}</p>
             </div>
             <input aria-label={`Quantity for ${product.name}`}
               type="number"
@@ -55,7 +55,7 @@ export default function CartPage() {
               className="field w-20 py-2"
             />
             <p className="w-24 text-right font-semibold">
-              ${(product.price * quantity).toFixed(2)}
+              ${(Number(product.price) * quantity).toFixed(2)}
             </p>
             <button
               onClick={() => run(() => removeItem(product._id))}
@@ -68,7 +68,7 @@ export default function CartPage() {
       </ul>
 
       <div className="flex flex-col items-stretch justify-between gap-4 rounded-2xl bg-zinc-950 p-5 text-white sm:flex-row sm:items-center">
-        <p className="text-lg font-bold">Total <span className="ml-2 text-indigo-300">${total.toFixed(2)}</span></p>
+        <p className="text-lg font-bold">Total <span className="ml-2 text-zinc-300">${total.toFixed(2)}</span></p>
         <Link href="/checkout" className="rounded-full bg-white px-5 py-3 text-center text-sm font-bold text-zinc-950 hover:bg-indigo-100">
           Checkout
         </Link>

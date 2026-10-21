@@ -10,30 +10,39 @@ export function CartProvider({ children }) {
   const [items, setItems] = useState([]);
 
   const refresh = useCallback(async () => {
+    if (!token) {
+      setItems([]);
+      return;
+    }
     const data = await api("/cart", { token });
-    setItems(data.items);
+    setItems(data.items || []);
   }, [token]);
+
+  useEffect(() => {
+    const task = Promise.resolve().then(() => refresh()).catch(() => setItems([]));
+    return () => { void task; };
+  }, [refresh]);
 
   // Hide items from a previous session without calling setState in the effect
   const visibleItems = token ? items : [];
 
   const addItem = async (productId, quantity = 1) => {
     const data = await api("/cart", { method: "POST", token, body: { productId, quantity } });
-    setItems(data.items);
+    setItems(data.items || []);
   };
 
   const updateItem = async (productId, quantity) => {
     const data = await api(`/cart/${productId}`, { method: "PUT", token, body: { quantity } });
-    setItems(data.items);
+    setItems(data.items || []);
   };
 
   const removeItem = async (productId) => {
     const data = await api(`/cart/${productId}`, { method: "DELETE", token });
-    setItems(data.items);
+    setItems(data.items || []);
   };
 
   const count = visibleItems.reduce((sum, i) => sum + i.quantity, 0);
-  const total = visibleItems.reduce((sum, i) => sum + i.product.price * i.quantity, 0);
+  const total = visibleItems.reduce((sum, i) => sum + Number(i.product.price) * i.quantity, 0);
 
   return (
     <CartContext.Provider
