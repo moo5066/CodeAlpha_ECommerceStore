@@ -19,7 +19,10 @@ app.use(
     allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
+
 app.use(express.json());
+const { UPLOAD_DIR } = require("./middleware/upload.middleware");
+app.use("/uploads", express.static(UPLOAD_DIR));
 
 app.get("/api/health", (req, res) => {
   res.json({ message: "API is running" });

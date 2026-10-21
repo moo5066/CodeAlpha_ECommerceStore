@@ -19,6 +19,9 @@ export default function Navbar() {
           <Link href="/cart" className="rounded-full px-3 py-2 text-zinc-600 hover:bg-zinc-100 hover:text-zinc-950">Cart <span className="text-zinc-950">({count})</span></Link>
           {user ? (
             <>
+              {user.role === "admin" && (
+                <Link href="/admin/products" className="hidden text-zinc-500 hover:text-zinc-950 sm:inline">Admin</Link>
+              )}
               <Link href="/orders" className="hidden text-zinc-500 hover:text-zinc-950 sm:inline">Orders</Link>
               <button onClick={logout} className="rounded-full border border-zinc-200 px-3 py-2 text-zinc-600 hover:border-zinc-950 hover:text-zinc-950">Log out</button>
             </>

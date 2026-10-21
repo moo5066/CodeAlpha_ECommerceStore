@@ -1,7 +1,9 @@
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5001";
 
 export async function api(path, { method = "GET", body, token } = {}) {
-  const headers = { "Content-Type": "application/json" };
+  const isForm = body instanceof FormData;
+  const headers = {};
+  if (body && !isForm) headers["Content-Type"] = "application/json";
   if (token) headers.Authorization = `Bearer ${token}`;
 
   let res;
@@ -9,7 +11,7 @@ export async function api(path, { method = "GET", body, token } = {}) {
     res = await fetch(`${API_URL}/api${path}`, {
       method,
       headers,
-      body: body ? JSON.stringify(body) : undefined,
+      body: isForm ? body : body ? JSON.stringify(body) : undefined,
     });
   } catch {
     throw new Error(
